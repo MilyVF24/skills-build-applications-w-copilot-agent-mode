@@ -6,10 +6,9 @@ function Users() {
   const [loading, setLoading] = useState(true);
 
   const codespaceName = import.meta.env.VITE_CODESPACE_NAME?.trim();
-  const apiBaseUrl = codespaceName
-    ? `https://${codespaceName}-8000.app.github.dev/api`
-    : 'http://localhost:8000/api';
-  const usersUrl = `${apiBaseUrl}/users/`;
+  const usersUrl = codespaceName
+    ? `https://${codespaceName}-8000.app.github.dev/api/users/`
+    : 'http://localhost:8000/api/users/';
 
   useEffect(() => {
     const fetchUsers = async () => {

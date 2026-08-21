@@ -6,10 +6,9 @@ function Teams() {
   const [loading, setLoading] = useState(true);
 
   const codespaceName = import.meta.env.VITE_CODESPACE_NAME?.trim();
-  const apiBaseUrl = codespaceName
-    ? `https://${codespaceName}-8000.app.github.dev/api`
-    : 'http://localhost:8000/api';
-  const teamsUrl = `${apiBaseUrl}/teams/`;
+  const teamsUrl = codespaceName
+    ? `https://${codespaceName}-8000.app.github.dev/api/teams/`
+    : 'http://localhost:8000/api/teams/';
 
   useEffect(() => {
     const fetchTeams = async () => {

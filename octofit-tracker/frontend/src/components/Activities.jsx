@@ -6,10 +6,9 @@ function Activities() {
   const [loading, setLoading] = useState(true);
 
   const codespaceName = import.meta.env.VITE_CODESPACE_NAME?.trim();
-  const apiBaseUrl = codespaceName
-    ? `https://${codespaceName}-8000.app.github.dev/api`
-    : 'http://localhost:8000/api';
-  const activitiesUrl = `${apiBaseUrl}/activities/`;
+  const activitiesUrl = codespaceName
+    ? `https://${codespaceName}-8000.app.github.dev/api/activities/`
+    : 'http://localhost:8000/api/activities/';
 
   useEffect(() => {
     const fetchActivities = async () => {
