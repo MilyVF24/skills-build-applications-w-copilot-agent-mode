@@ -48,21 +48,17 @@ function Users() {
   }
 
   return (
-    <div className="card shadow-sm border-0">
-      <div className="card-body">
-        <h2 className="h4 mb-3">Users</h2>
-        <div className="row g-3">
-          {users.map((user) => (
-            <div className="col-md-6" key={user._id || user.id}>
-              <div className="border rounded p-3 h-100">
-                <h3 className="h5 mb-1">{user.name}</h3>
-                <p className="text-muted mb-2">{user.role}</p>
-                <p className="mb-1"><strong>Email:</strong> {user.email}</p>
-                <p className="mb-0"><strong>Fitness level:</strong> {user.fitnessLevel}</p>
-              </div>
-            </div>
-          ))}
-        </div>
+    <div className="content-panel">
+      <h2 className="section-title">Users</h2>
+      <div className="user-grid">
+        {users.map((user) => (
+          <div className="user-card" key={user._id || user.id}>
+            <h3>{user.name}</h3>
+            <p className="user-role">{user.role}</p>
+            <p><strong>Email:</strong> {user.email}</p>
+            <p><strong>Fitness level:</strong> {user.fitnessLevel}</p>
+          </div>
+        ))}
       </div>
     </div>
   );

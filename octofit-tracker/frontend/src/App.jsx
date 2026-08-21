@@ -19,39 +19,38 @@ function App() {
   const apiBaseUrl = getApiBaseUrl();
 
   return (
-    <div className="container py-4">
-      <header className="mb-4">
-        <h1 className="display-5 fw-semibold mb-2">OctoFit Tracker</h1>
-        <p className="text-muted mb-0">
-          API base: <code>{apiBaseUrl}</code>
-        </p>
-        <p className="small text-muted mt-2 mb-0">
+    <div className="app-shell">
+      <header className="app-header">
+        <h1>OctoFit Tracker</h1>
+        <div className="api-banner">
+          <span className="api-label">API base:</span>
+          <code>{apiBaseUrl}</code>
+        </div>
+        <p className="api-help">
           Set <code>VITE_CODESPACE_NAME</code> in <code>.env.local</code> to use a Codespaces URL.
           If it is unset, the app falls back to <code>http://localhost:8000/api</code>.
         </p>
       </header>
 
-      <nav className="navbar navbar-expand-lg navbar-dark bg-dark rounded mb-4 px-3">
-        <div className="container-fluid px-0">
-          <span className="navbar-brand me-3">OctoFit</span>
-          <div className="navbar-nav d-flex flex-row flex-wrap gap-2">
-            {navigation.map((item) => (
-              <NavLink
-                key={item.to}
-                to={item.to}
-                end={item.end}
-                className={({ isActive }) =>
-                  `nav-link px-3 py-2 rounded ${isActive ? 'bg-light text-dark' : 'text-white-50'}`
-                }
-              >
-                {item.label}
-              </NavLink>
-            ))}
-          </div>
+      <nav className="app-nav">
+        <div className="app-nav-brand">OctoFit</div>
+        <div className="app-nav-links">
+          {navigation.map((item) => (
+            <NavLink
+              key={item.to}
+              to={item.to}
+              end={item.end}
+              className={({ isActive }) =>
+                `app-nav-link ${isActive ? 'active' : ''}`
+              }
+            >
+              {item.label}
+            </NavLink>
+          ))}
         </div>
       </nav>
 
-      <main>
+      <main className="app-main">
         <Routes>
           <Route path="/" element={<Users />} />
           <Route path="/teams" element={<Teams />} />
