@@ -1,22 +1,34 @@
 import { useEffect, useState } from 'react';
-import { getApiUrl, normalizeRecords } from '../utils/api';
 
 function Teams() {
   const [teams, setTeams] = useState([]);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(true);
 
+  const codespaceName = import.meta.env.VITE_CODESPACE_NAME?.trim();
+  const apiBaseUrl = codespaceName
+    ? `https://${codespaceName}-8000.app.github.dev/api`
+    : 'http://localhost:8000/api';
+  const teamsUrl = `${apiBaseUrl}/teams/`;
+
   useEffect(() => {
     const fetchTeams = async () => {
       try {
-        const response = await fetch(getApiUrl('teams'));
+        const response = await fetch(teamsUrl);
 
         if (!response.ok) {
           throw new Error(`Failed to load teams (${response.status})`);
         }
 
         const payload = await response.json();
-        setTeams(normalizeRecords(payload));
+        const records = Array.isArray(payload)
+          ? payload
+          : Array.isArray(payload?.data)
+            ? payload.data
+            : Array.isArray(payload?.results)
+              ? payload.results
+              : [];
+        setTeams(records);
       } catch (loadError) {
         setError(loadError.message);
       } finally {
@@ -25,7 +37,7 @@ function Teams() {
     };
 
     fetchTeams();
-  }, []);
+  }, [teamsUrl]);
 
   if (loading) {
     return <div className="alert alert-info">Loading teams...</div>;

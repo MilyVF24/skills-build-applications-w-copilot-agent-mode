@@ -1,22 +1,34 @@
 import { useEffect, useState } from 'react';
-import { getApiUrl, normalizeRecords } from '../utils/api';
 
 function Workouts() {
   const [workouts, setWorkouts] = useState([]);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(true);
 
+  const codespaceName = import.meta.env.VITE_CODESPACE_NAME?.trim();
+  const apiBaseUrl = codespaceName
+    ? `https://${codespaceName}-8000.app.github.dev/api`
+    : 'http://localhost:8000/api';
+  const workoutsUrl = `${apiBaseUrl}/workouts/`;
+
   useEffect(() => {
     const fetchWorkouts = async () => {
       try {
-        const response = await fetch(getApiUrl('workouts'));
+        const response = await fetch(workoutsUrl);
 
         if (!response.ok) {
           throw new Error(`Failed to load workouts (${response.status})`);
         }
 
         const payload = await response.json();
-        setWorkouts(normalizeRecords(payload));
+        const records = Array.isArray(payload)
+          ? payload
+          : Array.isArray(payload?.data)
+            ? payload.data
+            : Array.isArray(payload?.results)
+              ? payload.results
+              : [];
+        setWorkouts(records);
       } catch (loadError) {
         setError(loadError.message);
       } finally {
@@ -25,7 +37,7 @@ function Workouts() {
     };
 
     fetchWorkouts();
-  }, []);
+  }, [workoutsUrl]);
 
   if (loading) {
     return <div className="alert alert-info">Loading workouts...</div>;

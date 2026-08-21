@@ -1,22 +1,34 @@
 import { useEffect, useState } from 'react';
-import { getApiUrl, normalizeRecords } from '../utils/api';
 
 function Users() {
   const [users, setUsers] = useState([]);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(true);
 
+  const codespaceName = import.meta.env.VITE_CODESPACE_NAME?.trim();
+  const apiBaseUrl = codespaceName
+    ? `https://${codespaceName}-8000.app.github.dev/api`
+    : 'http://localhost:8000/api';
+  const usersUrl = `${apiBaseUrl}/users/`;
+
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await fetch(getApiUrl('users'));
+        const response = await fetch(usersUrl);
 
         if (!response.ok) {
           throw new Error(`Failed to load users (${response.status})`);
         }
 
         const payload = await response.json();
-        setUsers(normalizeRecords(payload));
+        const records = Array.isArray(payload)
+          ? payload
+          : Array.isArray(payload?.data)
+            ? payload.data
+            : Array.isArray(payload?.results)
+              ? payload.results
+              : [];
+        setUsers(records);
       } catch (loadError) {
         setError(loadError.message);
       } finally {
@@ -25,7 +37,7 @@ function Users() {
     };
 
     fetchUsers();
-  }, []);
+  }, [usersUrl]);
 
   if (loading) {
     return <div className="alert alert-info">Loading users...</div>;
